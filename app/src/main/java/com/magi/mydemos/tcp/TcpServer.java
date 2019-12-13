@@ -4,6 +4,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class TcpServer {
+
     public void start(){
         ServerSocket serverSocket;
         try {
@@ -11,7 +12,7 @@ public class TcpServer {
             MessagePool.getInstance().start();
 
             while (true) {
-                //从连接请求队列中去除一个连接
+                //从连接请求队列中取出一个连接
                 Socket socket = serverSocket.accept();
 
                 System.out.println("ip = " + socket.getInetAddress().getHostAddress() + " ,port = " + socket.getPort() + " is online...");

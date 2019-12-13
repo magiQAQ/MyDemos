@@ -13,7 +13,7 @@ public class ClientTask extends Thread implements MessagePool.MessageComingListe
     private InputStream inputStream;
     private OutputStream outputStream;
 
-    public ClientTask(Socket socket) {
+    ClientTask(Socket socket) {
         try {
             this.socket = socket;
             inputStream = socket.getInputStream();
@@ -33,7 +33,7 @@ public class ClientTask extends Thread implements MessagePool.MessageComingListe
             while ((line = bufferedReader.readLine()) != null) {
                 System.out.println("read = " + line);
                 //转发消息至其他socket
-                MessagePool.getInstance().sendMessage(line);
+                MessagePool.getInstance().sendMessage(socket.getPort()+":"+line);
             }
 
 
