@@ -1,2 +1,2 @@
-include ':app'
+include ':udp-tcp-http', ':animation'
 rootProject.name='MyDemos'
