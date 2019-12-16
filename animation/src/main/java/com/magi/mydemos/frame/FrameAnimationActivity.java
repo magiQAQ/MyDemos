@@ -1,11 +1,12 @@
-package com.magi.mydemos;
+package com.magi.mydemos.frame;
+
+import android.graphics.drawable.AnimationDrawable;
+import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.view.View;
+import com.magi.mydemos.R;
 
 public class FrameAnimationActivity extends AppCompatActivity {
 
