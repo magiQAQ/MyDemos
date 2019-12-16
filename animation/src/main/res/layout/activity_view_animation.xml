@@ -13,6 +13,22 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <View
+            android:id="@+id/viewAccelerate"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="8dp"
+            android:background="@color/colorPrimary"
+            android:onClick="onClick" />
+
+        <View
+            android:id="@+id/viewLinear"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="8dp"
+            android:background="@color/colorPrimaryDark"
+            android:onClick="onClick" />
+
         <TextView
             android:id="@+id/viewAlphaAnimation"
             style="@style/animation_text"
@@ -44,6 +60,14 @@
             android:layout_height="wrap_content"
             android:onClick="onClick"
             android:text="Rotate" />
+
+        <TextView
+            android:id="@+id/viewSetAnimation"
+            style="@style/animation_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="Set" />
     </LinearLayout>
 
 </ScrollView>

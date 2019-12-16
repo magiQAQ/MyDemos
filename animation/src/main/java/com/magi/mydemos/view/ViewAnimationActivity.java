@@ -2,8 +2,10 @@ package com.magi.mydemos.view;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,6 +37,24 @@ public class ViewAnimationActivity extends AppCompatActivity {
                 Animation rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
                 view.startAnimation(rotateAnimation);
                 break;
+            case R.id.viewSetAnimation:
+                Animation setAnimation = AnimationUtils.loadAnimation(this, R.anim.set);
+                view.startAnimation(setAnimation);
+                break;
+            case R.id.viewAccelerate:
+            case R.id.viewLinear:
+                View viewAccelerate = findViewById(R.id.viewAccelerate);
+                View viewLinear = findViewById(R.id.viewLinear);
+                //动画设置
+                Animation animationLinear = AnimationUtils.loadAnimation(this, R.anim.translate);
+                Animation animationAccelerate = AnimationUtils.loadAnimation(this, R.anim.translate);
+                animationLinear.setInterpolator(new LinearInterpolator());
+                animationAccelerate.setInterpolator(new AccelerateInterpolator());
+
+                viewLinear.startAnimation(animationLinear);
+                viewAccelerate.startAnimation(animationAccelerate);
+                break;
+
         }
     }
 }
