@@ -1,2 +1,2 @@
-include ':udp-tcp-http', ':animation', ':transitionanimation'
+include ':udp-tcp-http', ':animation', ':transitionanimation', ':customviewdemo'
 rootProject.name='MyDemos'
