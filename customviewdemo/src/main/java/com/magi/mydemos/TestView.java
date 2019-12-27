@@ -5,8 +5,11 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -15,6 +18,7 @@ public class TestView extends View {
 
     private String stringTest = "magi";
     private Paint paint;
+    private static final String INSTANCE = "instance";
 
     public TestView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -105,6 +109,9 @@ public class TestView extends View {
         return 0;
     }
 
+    private static final String KEY_TEXT = "key_text";
+    private boolean isFirstDraw = true;
+
     @Override
     protected void onDraw(Canvas canvas) {
         int radius = Math.min(getWidth(), getHeight()) / 2 - (int) paint.getStrokeWidth() / 2;
@@ -113,7 +120,34 @@ public class TestView extends View {
         canvas.drawLine(0, 0, getWidth(), getHeight(), paint);
         canvas.drawLine(getWidth(), 0, 0, getHeight(), paint);
         paint.setTextSize(50f);
-        paint.setStyle(Paint.Style.FILL);
         canvas.drawText(stringTest, 0, stringTest.length(), 0, paint.getTextSize(), paint);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        stringTest = "12345";
+        invalidate();
+        return super.onTouchEvent(event);
+    }
+
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_TEXT, stringTest);
+        bundle.putParcelable(INSTANCE, super.onSaveInstanceState());
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (state instanceof Bundle) {
+            Bundle bundle = (Bundle) state;
+            Parcelable parcelable = bundle.getParcelable(INSTANCE);
+            super.onRestoreInstanceState(parcelable);
+            stringTest = bundle.getString(KEY_TEXT);
+            return;
+        }
+        super.onRestoreInstanceState(state);
     }
 }
