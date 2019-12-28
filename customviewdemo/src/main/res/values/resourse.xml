@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <declare-styleable name="TestView">
         <attr name="test_boolean" format="boolean" />
         <attr name="test_string" format="string" />
@@ -15,7 +15,7 @@
         <attr name="color" format="color" />
         <attr name="lineWidth" format="dimension" />
         <attr name="radius" format="dimension" />
-        <attr name="progress" format="integer" />
-        <attr name="text_size" format="dimension" />
+        <attr name="android:progress" />
+        <attr name="android:textSize" />
     </declare-styleable>
 </resources>

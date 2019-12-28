@@ -3,12 +3,13 @@ package com.magi.mydemos;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -17,48 +18,25 @@ import androidx.annotation.Nullable;
 public class RoundProgressBar extends View {
 
     private static final String INSTANCE = "instance";
-    private static final String KEY_TEXT = "key_text";
-    private String stringTest = "magi";
+    private static final String KEY_PROGRESS = "key_progress";
+    private int radius;
+    private int color;
+    private int lineWidth;
+
     private Paint paint;
-    private boolean isFirstDraw = true;
+    private int textSize;
+    private int progress;
 
     public RoundProgressBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-
-        initPaint();
-
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TestView);
-        boolean booleanTest = typedArray.getBoolean(R.styleable.TestView_test_boolean, false);
-        int integerTest = typedArray.getInt(R.styleable.TestView_test_integer, -1);
-        float dimensionTest = typedArray.getDimension(R.styleable.TestView_test_dimension, 0f);
-        int enumTest = typedArray.getInt(R.styleable.TestView_test_enum, 1);
-        int count = typedArray.getIndexCount();
-
-        for (int i = 0; i < count; i++) {
-            int index = typedArray.getIndex(i);
-            switch (index) {
-                case R.styleable.TestView_test_string:
-                    stringTest = typedArray.getString(R.styleable.TestView_test_string);
-                    break;
-            }
-        }
-
-        //String stringTest = typedArray.getString(R.styleable.TestView_test_string);
-        Log.e("TestView", "booleanTest:" + booleanTest + "\n"
-                + "integerTest:" + integerTest + "\n"
-                + "dimensionTest:" + dimensionTest + "\n"
-                + "enumTest:" + enumTest + "\n"
-                + "stringTest:" + stringTest);
-
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RoundProgressBar);
+        color = typedArray.getColor(R.styleable.RoundProgressBar_color, context.getResources().getColor(R.color.colorAccent));
+        radius = (int) typedArray.getDimension(R.styleable.RoundProgressBar_radius, 0f);
+        lineWidth = (int) typedArray.getDimension(R.styleable.RoundProgressBar_lineWidth, dp2px(2f));
+        textSize = (int) typedArray.getDimension(R.styleable.RoundProgressBar_android_textSize, dp2px(20f));
+        progress = typedArray.getInt(R.styleable.RoundProgressBar_android_progress, 0);
         typedArray.recycle();
-    }
-
-    private void initPaint() {
-        paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(6f);
-        paint.setColor(Color.rgb(0XFF, 0, 0));
-        paint.setAntiAlias(true);
+        initPaint();
     }
 
     @Override
@@ -111,29 +89,56 @@ public class RoundProgressBar extends View {
         return 0;
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        int radius = Math.min(getWidth(), getHeight()) / 2 - (int) paint.getStrokeWidth() / 2;
-        canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, paint);
-        paint.setStrokeWidth(1);
-        canvas.drawLine(0, 0, getWidth(), getHeight(), paint);
-        canvas.drawLine(getWidth(), 0, 0, getHeight(), paint);
-        paint.setTextSize(50f);
-        canvas.drawText(stringTest, 0, stringTest.length(), 0, paint.getTextSize(), paint);
+    private float dp2px(float dpValue) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, getResources().getDisplayMetrics());
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        stringTest = "12345";
-        invalidate();
         return super.onTouchEvent(event);
+    }
+
+    private void initPaint() {
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(color);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        paint.setStyle(Paint.Style.STROKE);
+        //先画底部的圆
+        paint.setStrokeWidth(lineWidth * 1.0f / 4);
+        int cx = getWidth() / 2 + getPaddingLeft() / 2 - getPaddingRight() / 2;
+        int cy = getHeight() / 2 + getPaddingTop() / 2 - getPaddingBottom() / 2;
+        int r = radius != 0 ? radius : Math.min(getWidth() - getPaddingLeft() - getPaddingRight(),
+                getHeight() - getPaddingTop() - getPaddingBottom()) / 2 - lineWidth / 2;
+        canvas.drawCircle(cx, cy, r, paint);
+        //再画表示进度的弧度
+        RectF rectF = new RectF(getPaddingLeft() + lineWidth / 2,
+                getPaddingTop() + lineWidth / 2,
+                getWidth() - getPaddingRight() - lineWidth / 2,
+                getHeight() - getPaddingBottom() - lineWidth / 2);
+        float sweep = progress * 360f / 100;
+        paint.setStrokeWidth(lineWidth);
+        canvas.drawArc(rectF, -90, sweep, false, paint);
+        //最后画文字
+        String text = progress + "%";
+        paint.setStrokeWidth(4);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setTextSize(textSize);
+        Rect rect = new Rect();
+        paint.getTextBounds(text, 0, text.length(), rect);
+        int textHeight = rect.height();
+        canvas.drawText(text, cx, cy + textHeight / 2, paint);
     }
 
     @Nullable
     @Override
     protected Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_TEXT, stringTest);
+        bundle.putInt(KEY_PROGRESS, progress);
         bundle.putParcelable(INSTANCE, super.onSaveInstanceState());
         return bundle;
     }
@@ -144,7 +149,7 @@ public class RoundProgressBar extends View {
             Bundle bundle = (Bundle) state;
             Parcelable parcelable = bundle.getParcelable(INSTANCE);
             super.onRestoreInstanceState(parcelable);
-            stringTest = bundle.getString(KEY_TEXT);
+            progress = bundle.getInt(KEY_PROGRESS);
             return;
         }
         super.onRestoreInstanceState(state);

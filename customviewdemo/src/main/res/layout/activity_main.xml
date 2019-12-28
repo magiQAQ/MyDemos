@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:magi="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.magi.mydemos.TestView
+    <com.magi.mydemos.RoundProgressBar
         android:id="@+id/testView"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerInParent="true"
-        android:background="#44ff0000"
-        magi:test_boolean="true"
-        magi:test_dimension="10dp"
-        magi:test_enum="top"
-        magi:test_integer="10086" />
+        android:progress="30"
+        app:lineWidth="4dp" />
 
 
 </RelativeLayout>
