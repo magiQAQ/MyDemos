@@ -7,6 +7,7 @@
     tools:context=".MainActivity">
 
     <com.magi.mydemos.TestView
+        android:id="@+id/testView"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerInParent="true"

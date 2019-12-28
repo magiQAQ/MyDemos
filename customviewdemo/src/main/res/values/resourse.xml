@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="TestView">
-        <attr name="test_boolean" format="boolean"></attr>
-        <attr name="test_string" format="string"></attr>
-        <attr name="test_integer" format="integer"></attr>
+        <attr name="test_boolean" format="boolean" />
+        <attr name="test_string" format="string" />
+        <attr name="test_integer" format="integer" />
         <attr name="test_enum" format="enum">
             <enum name="top" value="1" />
             <enum name="bottom" value="2" />
         </attr>
-        <attr name="test_dimension" format="dimension"></attr>
+        <attr name="test_dimension" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="RoundProgressBar">
+        <attr name="color" format="color" />
+        <attr name="lineWidth" format="dimension" />
+        <attr name="radius" format="dimension" />
+        <attr name="progress" format="integer" />
+        <attr name="text_size" format="dimension" />
     </declare-styleable>
 </resources>
