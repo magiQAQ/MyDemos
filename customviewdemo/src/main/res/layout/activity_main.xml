@@ -7,11 +7,14 @@
     tools:context=".MainActivity">
 
     <com.magi.mydemos.RoundProgressBar
-        android:id="@+id/testView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/roundProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:progress="30"
+        android:progress="0"
+        android:textSize="20sp"
+        app:color="#0000ff"
+        app:radius="80dp"
         app:lineWidth="4dp" />
 
 

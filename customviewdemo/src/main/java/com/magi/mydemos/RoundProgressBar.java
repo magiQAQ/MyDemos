@@ -27,6 +27,9 @@ public class RoundProgressBar extends View {
     private int textSize;
     private int progress;
 
+    private RectF progressRectF;
+    private Rect textRect;
+
     public RoundProgressBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RoundProgressBar);
@@ -78,15 +81,16 @@ public class RoundProgressBar extends View {
                 height = needHeight;
             }
         }
+
         setMeasuredDimension(width, height);
     }
 
     private int measureWidth() {
-        return 0;
+        return radius * 2;
     }
 
     private int measureHeight() {
-        return 0;
+        return radius * 2;
     }
 
     private float dp2px(float dpValue) {
@@ -96,6 +100,16 @@ public class RoundProgressBar extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        progressRectF = new RectF(getPaddingLeft() + lineWidth / 2f,
+                getPaddingTop() + lineWidth / 2f,
+                getWidth() - getPaddingRight() - lineWidth / 2f,
+                getHeight() - getPaddingBottom() - lineWidth / 2f);
+        textRect = new Rect();
     }
 
     private void initPaint() {
@@ -115,23 +129,30 @@ public class RoundProgressBar extends View {
                 getHeight() - getPaddingTop() - getPaddingBottom()) / 2 - lineWidth / 2;
         canvas.drawCircle(cx, cy, r, paint);
         //再画表示进度的弧度
-        RectF rectF = new RectF(getPaddingLeft() + lineWidth / 2,
-                getPaddingTop() + lineWidth / 2,
-                getWidth() - getPaddingRight() - lineWidth / 2,
-                getHeight() - getPaddingBottom() - lineWidth / 2);
         float sweep = progress * 360f / 100;
         paint.setStrokeWidth(lineWidth);
-        canvas.drawArc(rectF, -90, sweep, false, paint);
+        canvas.drawArc(progressRectF, -90, sweep, false, paint);
         //最后画文字
         String text = progress + "%";
         paint.setStrokeWidth(4);
         paint.setStyle(Paint.Style.FILL);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(textSize);
-        Rect rect = new Rect();
-        paint.getTextBounds(text, 0, text.length(), rect);
-        int textHeight = rect.height();
+        paint.getTextBounds(text, 0, text.length(), textRect);
+        float textHeight = textRect.height();
         canvas.drawText(text, cx, cy + textHeight / 2, paint);
+
+//        paint.setStrokeWidth(0);
+//        canvas.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2, paint);
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
+        invalidate();
     }
 
     @Nullable
