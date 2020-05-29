@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
                             touchPullView.setProgress(progress);
                         }
                         return true;
+                    case MotionEvent.ACTION_UP:
+                        touchPullView.release();
+                        return true;
                     default:
                         return false;
                 }
